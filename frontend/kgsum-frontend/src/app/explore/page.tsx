@@ -5,7 +5,7 @@ export default function QueryBuilder(): ReactNode {
 
     return (
         <iframe
-            src="http://localhost:7200/sparql"
+            src="http://172.20.0.1:7400/sparql"
             className="grow"
         />
     );
