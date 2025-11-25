@@ -5,7 +5,7 @@ export default function QueryBuilder(): ReactNode {
 
     return (
         <iframe
-            src="http://172.20.0.1:7400/sparql"
+            src="http://www.isislab.it:12280/kgsum-graphdb"
             className="grow"
         />
     );

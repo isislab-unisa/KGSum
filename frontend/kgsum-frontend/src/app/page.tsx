@@ -1,6 +1,6 @@
 import {Button} from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
+import {Banner} from "@/components/banner";
 
 export default function Home() {
     return (
@@ -37,13 +37,7 @@ export default function Home() {
             </div>
             <div className="min-w-4/11 h-[90%] hidden lg:flex p-4">
                 <div className="relative w-full h-full rounded-3xl overflow-hidden">
-                    <Image
-                        alt="Banner"
-                        src="/banner.png"
-                        fill
-                        className="object-cover"
-                        priority
-                    />
+                  <Banner/>
                 </div>
             </div>
         </main>

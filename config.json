@@ -21,12 +21,12 @@
      "classifier": "NAIVE_BAYES",
      "feature": ["CURI", "PURI", "LAB", "CON", "TLDS", "VOC", "LCN", "LPN", "DSC", "SBJ"],
      "oversample": true,
-     "max_token": 50000000,
+     "max_token": 36000,
      "use_tfidf_autoencoder": true
   },
   "profile": {
     "store_profile_after_training": false,
-    "base_domain": "https://example.org"
+    "base_domain": "http://www.isislab.it"
   },
   "general_settings": {
     "info": "Possible classifiers: SVM, NAIVE_BAYES, KNN, J48, MISTRAL, MLP, DEEP, BATCHNORM, Phase: LABELING, EXTRACTION, PROCESSING, TRAINING, STORE",
