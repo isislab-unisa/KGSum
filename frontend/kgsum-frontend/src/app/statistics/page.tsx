@@ -42,6 +42,7 @@ const datasetDistributionData: DatasetDistributionItem[] = [
     {name: "Geography", value: 92, color: "#48CAE4"},
     {name: "Media", value: 66, color: "#0077BE"},
     {name: "Social Networking", value: 18, color: "#006A96"},
+    {name: "Government", value: 100, color: "#005372"},
 ]
 
 const accuracyData: MetricDataItem[] = [
@@ -102,6 +103,7 @@ const pieChartConfig = {
     "Geography": {label: "Geography", color: "#48CAE4"},
     "Media": {label: "Media", color: "#0077BE"},
     "Social Networking": {label: "Social Networking", color: "#006A96"},
+    "Government": {label: "Government", color: "#005372"},
 } satisfies ChartConfig
 
 const metricsChartConfig = {

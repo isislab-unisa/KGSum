@@ -40,9 +40,7 @@ export default function PrivacyPolicyPage() {
                             <p className="font-semibold">Data Controller:</p>
                             <div className="flex items-center gap-2 mt-2">
                                 <Mail className="h-4 w-4"/>
-                                <span>Mario Cosenza - m.cosenza11@studenti.unisa.it</span>
-                                <span>Gabriele Tuozzo - gtuozzo@unisa.it</span>
-                                <span>Maria Angela Pellegrino - mapellegrino@unisa.it</span>
+                                <span>Gabriele Tuozzo - gtuozzo@unisa.it <br/> Maria Angela Pellegrino - mapellegrino@unisa.it  <br/> Mario Cosenza - m.cosenza11@studenti.unisa.it </span>
                             </div>
                         </div>
                     </CardContent>
