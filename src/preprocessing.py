@@ -344,6 +344,7 @@ def preprocess_combined(
         tlds = sanitize_field(row.get("tlds", ""))
         sparql = sanitize_field(row.get("sparql", ""))
         creator = row.get("creator", "")
+        download = row.get("download", "")
         license_ = row.get("license", "")
 
         lab_list = row.get("lab", [])
@@ -369,6 +370,7 @@ def preprocess_combined(
                 "tlds": tlds,
                 "sparql": sparql,
                 "creator": creator,
+                "download": download,
                 "license": license_,
                 "ner": ner_types,
                 "language": language,
@@ -553,6 +555,7 @@ def process_all_from_input(
             "tlds": remove_duplicates(combined_df["tlds"].tolist()),
             "sparql": remove_duplicates(combined_df["sparql"].tolist()),
             "creator": remove_duplicates(combined_df["creator"].tolist()),
+            "download": remove_duplicates(combined_df["download"].tolist()),
             "license": remove_duplicates(combined_df["license"].tolist()),
             "language": remove_duplicates(combined_df["language"].tolist()),
             "dsc": remove_duplicates(void_df["dsc"].tolist()),

@@ -352,9 +352,28 @@ async def store_profile(
 
             await _update_query(query_subject)
             logger.info(f"Successfully inserted subject data for IRI: {iri}")
+    except Exception as error:
+        logger.warning(f"Cannot insert subject for IRI: {iri}. Error: {error}")
+
+    try:
+        download_triples = ""
+        for download in _flatten_and_stringify(profile.get('download')):
+            if download and IS_URI.match(download):
+                download_triples += f'{iri_formatted} dcat:downloadURL <{download}> .\n'
+
+        if download_triples:
+            query_download = f"""
+            PREFIX dcat: <http://www.w3.org/ns/dcat#>
+            INSERT DATA {{
+            {download_triples.rstrip()}
+            }}
+            """.strip()
+
+            await _update_query(query_download)
+            logger.info(f"Successfully inserted subject data for IRI: {iri}")
 
     except Exception as error:
-        logger.warning(f"Cannot insert subject data for IRI: {iri}. Error: {error}")
+        logger.warning(f"Cannot insert download data for IRI: {iri}. Error: {error}")
 
 
 if __name__ == '__main__':
