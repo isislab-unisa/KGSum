@@ -2,6 +2,8 @@ import type {NextConfig} from "next";
 
 const nextConfig: NextConfig = {
     output: 'standalone',
+    basePath: '/kgsum',
+    assetPrefix: '/kgsum',
     experimental: {
         serverActions: {
             bodySizeLimit: '500mb',
@@ -10,6 +12,7 @@ const nextConfig: NextConfig = {
     // Environment configuration
     env: {
         PORT: process.env.PORT || '80',
+        NEXT_PUBLIC_BASE_PATH: '/kgsum',
         BUILD_DATE: '2025-06-28 13:42:21',
         BUILD_USER: 'mariocosenza'
     },

@@ -5,6 +5,7 @@ import shutil
 import pandas as pd
 
 import src.pipeline_build
+from config import Config
 from src.pipeline_build import ClassifierType, majority_vote, predict_category_multi, save_multiple_models, \
     load_multiple_models
 from src.util import get_project_root, get_model_file_path, get_data_folder_path
@@ -22,14 +23,14 @@ class CategoryPredictor:
         return majority_vote(predict_category_multi(self.models, processed_data))
 
     @staticmethod
-    def get_predictor(classifier=ClassifierType.NAIVE_BAYES, feature_columns: list[str] = None, oversample=True):
+    def get_predictor(classifier=Config.CLASSIFIER, feature_columns: list[str] = None, oversample=True):
         combined_df_path = os.path.join(get_project_root(), 'data', 'processed', 'combined.json')
         if os.path.exists(combined_df_path):
             combined_df = pd.read_json(combined_df_path)
         else:
             combined_df = pd.DataFrame()
         if feature_columns is None:
-            feature_columns = ["curi"]
+            feature_columns = [feature.lower() for feature in Config.FEATURES]
         file_path = get_model_file_path()
         logger.info(f"Looking for trained model at: {file_path}")
         try:
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     if os.path.exists(directory_path):
         shutil.rmtree(directory_path)
     PREDICTOR = CategoryPredictor.get_predictor(
-        classifier=ClassifierType.NAIVE_BAYES,
-        feature_columns=['voc', 'curi', 'puri', 'lcn', 'lpn', 'lab', 'comments','tlds'],
-        oversample=False
+        classifier=Config.CLASSIFIER,
+        feature_columns=Config.FEATURES,
+        oversample=Config.OVERSAMPLE
     )

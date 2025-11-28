@@ -413,6 +413,36 @@ async def async_select_void_creator(endpoint: str, timeout: int = 300, void_file
     logger.info(f"[VCRE] Finished VOID creator query for endpoint: {endpoint}")
     return list(creators)
 
+async def async_select_void_download(endpoint: str, timeout: int = 300, void_file: bool = False) -> list[str]:
+    logger.info(f"[VCRE] Starting VOID creator query for endpoint: {endpoint}")
+    downloadURL: set[str] = set()
+    query = """
+        PREFIX void: <http://rdfs.org/ns/void#>
+        SELECT ?desc
+        WHERE {
+            ?s void:dataDump ?desc .
+        }
+        LIMIT 100
+    """
+    async with aiohttp.ClientSession() as session:
+        try:
+            result_text = await _fetch_query(session, endpoint, query, timeout)
+            root = eT.fromstring(result_text)
+            ns = {"sparql": "http://www.w3.org/2005/sparql-results#"}
+            bindings = root.findall('.//sparql:binding[@name="desc"]/*', ns)
+            for binding in bindings:
+                cre_text = binding.text or ""
+                if cre_text:
+                    downloadURL.add(cre_text)
+            if not downloadURL and not void_file:
+                void_uri = await async_has_void_file(endpoint, timeout)
+                if void_uri:
+                    return await async_select_void_creator(void_uri, timeout, True)
+        except Exception as e:
+            logger.warning(f"[VCRE] Query execution error: {e}. Endpoint: {endpoint}")
+            return []
+    logger.info(f"[DOWNLOAD] Finished VOID download query for endpoint: {endpoint}")
+    return list(downloadURL)
 
 async def async_select_void_subject_remote(endpoint: str, timeout: int = 300, void_file: bool = False) -> list[str]:
     logger.info(f"[SVJ] Starting VOID subject query for endpoint: {endpoint}")
@@ -510,6 +540,7 @@ async def process_endpoint_void(row: pd.Series) -> list[Any]:
     tasks = {
         "sbj": async_select_void_subject_remote(endpoint),
         "dsc": async_select_void_description(endpoint),
+        "download": async_select_void_download(endpoint),
     }
     results = await asyncio.gather(*tasks.values(), return_exceptions=True)
     result_dict = dict(zip(tasks.keys(), results))
@@ -518,6 +549,7 @@ async def process_endpoint_void(row: pd.Series) -> list[Any]:
         row_id,
         result_dict.get("sbj") or [],
         result_dict.get("dsc") or [],
+        result_dict.get("download") or [],
         str(row["category"]),
     ]
 
@@ -544,6 +576,7 @@ async def process_endpoint_full_inplace(endpoint: str, ingest_lov: bool = False)
         "title": title,
         "sbj": void_list[1],
         "dsc": void_list[2],
+        "download": void_list[3],
         "voc": data_list[2],
         "curi": data_list[3],
         "puri": data_list[4],

@@ -260,6 +260,23 @@ def select_local_creator(parsed_graph):
         return set()
     return {str(row.creator) for row in qres}
 
+def select_local_download(parsed_graph):
+    Q_LOCAL_VOID_DOWNLOAD = prepareQuery("""
+        SELECT ?download
+        WHERE {
+            ?s void:dataDump ?dump .
+        }
+        LIMIT 5
+    """, initNs={"void": 'http://rdfs.org/ns/void#'})
+    log_query(Q_LOCAL_VOID_DOWNLOAD)
+    try:
+        qres = parsed_graph.query(Q_LOCAL_VOID_DOWNLOAD)
+    except Exception as e:
+        logger.warning(f"SPARQL error in select_local_creator: {e}")
+        return set()
+    return {str(row.dump) for row in qres}
+
+
 
 def select_local_license(parsed_graph):
     Q_LOCAL_DCTERMS_LICENSE = prepareQuery("""
@@ -399,6 +416,7 @@ def process_file_full_inplace(
         tlds = select_local_tld(parsed_graph)
         endpoints = select_local_endpoint(parsed_graph)
         creators = select_local_creator(parsed_graph)
+        download = select_local_download(parsed_graph)
         licenses = select_local_license(parsed_graph)
         connections = select_local_con(parsed_graph)
 
@@ -424,6 +442,7 @@ def process_file_full_inplace(
             "sparql": endpoints,
             "tlds": list(tlds),
             "creator": list(creators),
+            "download": list(download),
             "license": list(licenses),
             "con": connections,
             "tags": voc_tags,
@@ -498,6 +517,7 @@ def process_local_void_dataset_file(args):
         title_list = select_local_void_title(parsed_graph)
         void_subjects = select_local_void_subject(parsed_graph)
         void_descriptions = select_local_void_description(parsed_graph)
+        download = select_local_download(parsed_graph)
 
         title = title_list[0] if title_list else ""
 
@@ -506,6 +526,7 @@ def process_local_void_dataset_file(args):
             title,
             list(void_subjects),
             list(void_descriptions),
+            list(download),
             lod_frame_global.at[file_num, "category"],
         ]
     except Exception as e:
@@ -623,7 +644,7 @@ def create_local_void_dataset(offset: int = 0, limit: int = 10000):
 
     if results:
         df = pd.DataFrame(results, columns=[
-            "id", "title", "sbj", "dsc", "category"
+            "id", "title", "sbj", "dsc", "download", "category"
         ])
         os.makedirs(os.path.dirname(out_path), exist_ok=True)
         df.to_json(out_path, orient="records", index=False)

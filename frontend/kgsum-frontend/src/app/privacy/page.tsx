@@ -32,15 +32,15 @@ export default function PrivacyPolicyPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <p>
-                            Welcome to <strong>KgSum</strong>, a web application for Knowledge Graph research
-                            developed as a thesis project. This Privacy Policy describes how we collect,
+                            Welcome to <strong>KgSum</strong>, a web application for Knowledge Graph research.
+                            This Privacy Policy describes how we collect,
                             use, and protect your personal information when you use our service.
                         </p>
                         <div className="bg-muted p-4 rounded-lg">
                             <p className="font-semibold">Data Controller:</p>
                             <div className="flex items-center gap-2 mt-2">
                                 <Mail className="h-4 w-4"/>
-                                <span>Mario Cosenza - cosenzamario@proton.me</span>
+                                <span>Gabriele Tuozzo - gtuozzo@unisa.it <br/> Maria Angela Pellegrino - mapellegrino@unisa.it  <br/> Mario Cosenza - m.cosenza11@studenti.unisa.it </span>
                             </div>
                         </div>
                     </CardContent>
@@ -267,8 +267,8 @@ export default function PrivacyPolicyPage() {
                             <p className="font-semibold">Mario Cosenza</p>
                             <div className="flex items-center gap-2 mt-2">
                                 <Mail className="h-4 w-4"/>
-                                <a href="mailto:cosenzamario@proton.me" className="text-primary hover:underline">
-                                    cosenzamario@proton.me
+                                <a href="mailto:m.cosenza11@studenti.unisa.it" className="text-primary hover:underline">
+                                    m.cosenza11@studenti.unisa.it
                                 </a>
                             </div>
                         </div>

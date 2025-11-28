@@ -13,25 +13,25 @@ export const Footer = () => {
                 <div className="flex items-center gap-2 mr-5">
                     <Link
                         aria-label="GitHub KgSum"
-                        href="https://github.com/mariocosenza/kgsum/"
+                        href="https://github.com/isislab-unisa/KGSum"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="flex items-center"
                     >
                         <Avatar className="hidden md:block h-6 w-6 mr-2 ">
-                            <AvatarImage src="https://avatars.githubusercontent.com/u/61911701?v=4"/>
-                            <AvatarFallback>MC</AvatarFallback>
+                            <AvatarImage src="https://avatars.githubusercontent.com/u/10548896?s=200&v=4"/>
+                            <AvatarFallback>ISIS</AvatarFallback>
                         </Avatar>
                     </Link>
                     <span className="text-sm text-gray-600">
                         A project by{" "}
                         <Link
-                            href="https://github.com/mariocosenza"
+                            href="https://github.com/isislab-unisa"
                             className="underline"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            @mariocosenza
+                            @isislab-unisa
                         </Link>
                     </span>
                 </div>

@@ -20,25 +20,9 @@ COPY --from=deps /app/node_modules ./node_modules
 # Copy the entire frontend application
 COPY ../../frontend/kgsum-frontend/ ./
 
-# Set environment variables for build (Next.js 15)
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ARG CLERK_SECRET_KEY
-
-# Validate that required environment variables are provided
-RUN if [ -z "$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY" ]; then \
-        echo "ERROR: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is required but not provided"; \
-        exit 1; \
-    fi
-
-# Export as environment variables for Next.js build
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-ENV CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
-
 
 # Verify environment variables are set (debug info)
 RUN echo "=== Environment Variables Check ==="
-RUN echo "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: ${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}"
-RUN echo "CLERK_SECRET_KEY: ${CLERK_SECRET_KEY}"
 RUN echo "Build Date: 2025-06-28 13:53:17"
 RUN echo "Build User: mariocosenza"
 RUN echo "==================================="
@@ -68,11 +52,6 @@ RUN chown mariocosenza:nodejs .next
 # Copy Next.js 15 standalone output
 COPY --from=builder --chown=mariocosenza:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=mariocosenza:nodejs /app/.next/static ./.next/static
-
-# Set runtime environment variables (only public ones)
-ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
-ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
-
 
 USER mariocosenza
 

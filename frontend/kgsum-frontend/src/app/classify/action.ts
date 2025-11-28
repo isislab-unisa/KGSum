@@ -1,7 +1,5 @@
 'use server'
 
-import {auth} from "@clerk/nextjs/server"; // For server actions
-// If you use client components, use: import { useAuth } from "@clerk/nextjs";
 
 export type FormState = {
     message: string;
@@ -13,8 +11,6 @@ export async function createPost(
     formData: FormData
 ): Promise<FormState> {
     try {
-        let token: string | null = "";
-        const enabled: boolean = process.env.CLERK_MIDDLEWARE_ENABLED === 'true';
         const mode = formData.get('mode') as string;
         const privacyConsent = formData.get('privacyConsent');
         const saveProfile = formData.get('saveProfile');
@@ -23,15 +19,6 @@ export async function createPost(
         const MAX_FILE_SIZE = 524288000; // 500MB in bytes
         const API_BASE_URL = process.env.CLASSIFICATION_API_URL || 'http://localhost:5000';
         // Get Clerk JWT token for authenticated user
-        if (enabled) {
-            const {getToken} = await auth();
-            token = await getToken();
-            if (!token) {
-                return {
-                    message: "Error: You need to be authenticated to use this function.",
-                };
-            }
-        }
 
 
         // Check privacy consent requirement
@@ -73,7 +60,6 @@ export async function createPost(
                     headers: {
                         'Content-Type': 'application/json',
                         'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`,
                     },
                     body: JSON.stringify(requestBody),
                     // No signal/timeout - let it run as long as needed
@@ -174,8 +160,6 @@ export async function createPost(
                     body: apiFormData, // multipart/form-data as expected by your API
                     headers: {
                         'Accept': 'application/json',
-                        'Authorization': `Bearer ${token}`,
-                        // Don't set Content-Type - let browser set it with boundary for multipart
                     },
                     // No signal/timeout - let it run as long as needed for large files
                 });

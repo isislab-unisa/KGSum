@@ -112,7 +112,7 @@
     --sidebar-ring: oklch(0.551 0.027 264.364);
 }
 
-@layer theme, base, clerk, components, utilities;
+@layer theme, base, components, utilities;
 
 @layer base {
     * {
