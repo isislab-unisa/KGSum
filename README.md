@@ -11,7 +11,7 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/mariocosenza/kgsum">
+  <a href="https://github.com/isislab-unisa/KGSum">
     <img src="images/logo.png" alt="Logo" width="100" height="80">
   </a>
 
@@ -23,9 +23,9 @@
     <br />
     <a href="https://github.com/mariocosenza/kgsum/wiki"><strong>Explore the docs »</strong></a>
     <br />
-    <a href="https://github.com/mariocosenza/kgsum/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
+    <a href="https://github.com/isislab-unisa/KGSum/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
-    <a href="https://github.com/mariocosenza/kgsum/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
+    <a href="https://github.com/isislab-unisa/KGSum/issues/new?labels=enhancement&template=feature-request---.md">Request Feature</a>
   </p>
 </div>
 
@@ -153,9 +153,8 @@ export LOCAL_ENDPOINT_LOV=http://your-local-endpoint
 export LOCAL_ENDPOINT=http://your-local-endpoint
 export SECRET_KEY=your_secret_key_here
 export UPLOAD_FOLDER=/path/to/uploads
+export UPLOAD=true
 export NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=your_clerk_publishable_key
-export CLERK_MIDDLEWARE_ENABLED=true  # Set false if authentication not required
-export CLERK_SECRET_KEY=your_clerk_secret_key
 export CLASSIFICATION_API_URL=http://localhost:5000
 export GITHUB_TOKEN=your_github_token_here
 ```
@@ -186,20 +185,20 @@ Configure the backend by editing `config.json`:
   },
   "training" : {
      "classifier": "NAIVE_BAYES",
-     "feature": ["CURI", "PURI"],
-     "oversample": false,
-     "max_token": 256,
+     "feature": ["CURI", "PURI", "LAB", "CON", "TLDS", "VOC", "LCN", "LPN", "DSC", "SBJ"],
+     "oversample": true,
+     "max_token": 36000,
      "use_tfidf_autoencoder": true
   },
   "profile": {
     "store_profile_after_training": false,
-    "base_domain": "https://example.org"
+    "base_domain": "http://www.isislab.it"
   },
   "general_settings": {
     "info": "Possible classifiers: SVM, NAIVE_BAYES, KNN, J48, MISTRAL, MLP, DEEP, BATCHNORM, Phase: LABELING, EXTRACTION, PROCESSING, TRAINING, STORE",
     "start_phase": "labeling",
     "stop_phase": "training",
-    "allow_upload": "false"
+    "allow_upload": true
   }
 }
 ```
@@ -323,8 +322,8 @@ Don't forget to give the project a star! Thanks again!
 
 ### Top contributors:
 
-<a href="https://github.com/mariocosenza/kgsum/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=mariocosenza/kgsum" alt="contrib.rocks image" />
+<a href="https://github.com/isislab-unisa/KGSum/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=isislab-unisa/KGSum" alt="contrib.rocks image" />
 </a>
 
 <!-- LICENSE -->
@@ -338,9 +337,10 @@ Distributed under the MIT License. See `LICENSE.txt` for more information.
 ## Contact
 
 Mario Cosenza - [@mario_cosenza_](https://x.com/mario_cosenza_) - cosenzamario@proton.me  
-Supervisor: Maria Angela Pellegrino
+Maria Angela Pellegrino - mapellegrino@unisa.it
+Gabriele Tuozzo - gtuozzo@unisa.it
 
-Project Link: [https://github.com/mariocosenza/kgsum](https://github.com/mariocosenza/kgsum)
+Project Link: [https://github.com/isislab-unisa/KGSum](https://github.com/mariocosenza/kgsum)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
