@@ -550,12 +550,12 @@ export const Form = () => {
                                             className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 flex-shrink-0"/>
                                         <div className="flex-1">
                                             <p className="text-green-700 dark:text-green-300 text-sm font-medium">
-                                                Classificazione completata con successo!
+                                                Classification completed successfully!
                                             </p>
                                             {selectedFile && (
                                                 <p className="text-green-600 dark:text-green-400 text-xs mt-1">
                                                     File
-                                                    elaborato: {selectedFile.name} ({formatFileSize(selectedFile.size)})
+                                                    elaborated: {selectedFile.name} ({formatFileSize(selectedFile.size)})
                                                 </p>
                                             )}
                                         </div>
