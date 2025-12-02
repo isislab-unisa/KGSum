@@ -89,7 +89,7 @@ async def generate_and_store_profile(
         }
 
 
-async def generate_profile_from_store(base_url: str = "https://isis"):
+async def generate_profile_from_store(base_url: str = "https://www.isislab.it/"):
     """Generate profiles from stored dataset."""
     try:
         dataset = pd.read_json('../data/processed/combined.json')
@@ -200,7 +200,7 @@ def _escape_sparql_literal(value: str) -> str:
 async def store_profile(
         profile: dict[str, Any],
         category: str,
-        base_iri: str = "http://example.org/resource/"
+        base_iri: str = "https://www.isislab.it/resource/"
 ) -> None:
     """Store profile data in triplestore with proper error handling."""
 
