@@ -89,7 +89,7 @@ async def generate_and_store_profile(
         }
 
 
-async def generate_profile_from_store(base_url: str = "https://exemple.org"):
+async def generate_profile_from_store(base_url: str = "https://isis"):
     """Generate profiles from stored dataset."""
     try:
         dataset = pd.read_json('../data/processed/combined.json')
@@ -272,7 +272,7 @@ async def store_profile(
 
         for con in _flatten_and_stringify(profile.get('con')):
             if con and IS_URI.match(con):
-                triples.append(f'{iri_formatted} owl:sameAs <{con}>')
+                triples.append(f'{iri_formatted} dcterms:source <{con}>')
 
         # Add identifier and category (use the extracted string, not the original raw_id)
         escaped_raw_id = _escape_sparql_literal(raw_id_str)
@@ -356,10 +356,12 @@ async def store_profile(
         logger.warning(f"Cannot insert subject for IRI: {iri}. Error: {error}")
 
     try:
+
         download_triples = ""
-        for download in _flatten_and_stringify(profile.get('download')):
-            if download and IS_URI.match(download):
-                download_triples += f'{iri_formatted} dcat:downloadURL <{download}> .\n'
+        if profile.get('download'):
+            for download in _flatten_and_stringify(profile.get('download')):
+                if download and IS_URI.match(download):
+                    download_triples += f'{iri_formatted} dcat:downloadURL <{download}> .\n'
 
         if download_triples:
             query_download = f"""
@@ -370,13 +372,12 @@ async def store_profile(
             """.strip()
 
             await _update_query(query_download)
-            logger.info(f"Successfully inserted subject data for IRI: {iri}")
+            logger.info(f"Successfully inserted dump data for IRI: {iri}")
 
     except Exception as error:
         logger.warning(f"Cannot insert download data for IRI: {iri}. Error: {error}")
 
 
 if __name__ == '__main__':
-    # Ensure predictor is loaded before running
     load_predictor()
     asyncio.run(generate_profile_from_store())
