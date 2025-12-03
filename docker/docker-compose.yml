@@ -57,6 +57,7 @@ services:
       - "7400:7200"
     environment:
       - TZ=UTC
+      - Dgraphdb.external-url=http://localhost:7400/kgsum/
     restart: unless-stopped
     volumes:
       # Optional: persist GraphDB data
