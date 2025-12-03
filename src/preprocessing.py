@@ -7,6 +7,7 @@ from typing import Any
 
 import pandas as pd
 import spacy
+from conda.gateways.connection.download import download
 from langdetect import detect, DetectorFactory, LangDetectException
 from pandas import Series
 
@@ -344,7 +345,6 @@ def preprocess_combined(
         tlds = sanitize_field(row.get("tlds", ""))
         sparql = sanitize_field(row.get("sparql", ""))
         creator = row.get("creator", "")
-        download = row.get("download", "")
         license_ = row.get("license", "")
 
         lab_list = row.get("lab", [])
@@ -370,7 +370,6 @@ def preprocess_combined(
                 "tlds": tlds,
                 "sparql": sparql,
                 "creator": creator,
-                "download": download,
                 "license": license_,
                 "ner": ner_types,
                 "language": language,
@@ -394,8 +393,10 @@ def process_void_row(
     sbj_raw = normalize_text_list(row.get("sbj", []))
     sbj_text = spacy_clean_normalize_single(sbj_raw, pipeline_dict_int, fallback_pipeline_int)
 
+    download_raw = normalize_text_list(row.get("download", []))
+
     logger.info(f"Completed void row {idx}/{total}")
-    return {"sbj": sbj_text, "dsc": dsc_text}
+    return {"sbj": sbj_text, "dsc": dsc_text, "download": download_raw}
 
 
 def preprocess_void(
@@ -412,6 +413,7 @@ def preprocess_void(
             "id": input_frame["id"] if "id" in input_frame.columns else list(range(total)),
             "sbj": [r["sbj"] for r in processed_rows],
             "dsc": [r["dsc"] for r in processed_rows],
+            "download": [r["download"] for r in processed_rows],
         }
     )
     logger.info(f"Void processing complete: {len(out_df)}/{total}")

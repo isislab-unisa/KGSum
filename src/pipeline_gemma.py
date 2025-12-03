@@ -23,13 +23,6 @@ def normalize_label(label):
 
 
 def compute_metrics(y_true, y_pred):
-    """
-    Calcola le metriche di classificazione standard tra due serie/array:
-    - accuracy
-    - precision (weighted)
-    - recall (weighted)
-    - f1 (weighted)
-    """
     acc = accuracy_score(y_true, y_pred)
     precision = precision_score(y_true, y_pred, average="weighted", zero_division=0)
     recall = recall_score(y_true, y_pred, average="weighted", zero_division=0)

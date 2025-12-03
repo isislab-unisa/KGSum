@@ -672,7 +672,7 @@ async def main_void() -> None:
             logger.warning(f"[VOID-MAIN] Error processing a VOID endpoint: {e}")
         processed += 1
         logger.info(f"[VOID-MAIN] Processed {processed}/{total} VOID endpoints")
-    df = pd.DataFrame(results, columns=["id", "sbj", "dsc", "category"])
+    df = pd.DataFrame(results, columns=["id", "sbj", "dsc", "download", "category"])
     output_path = "../data/raw/remote/remote_void_feature_set_sparqlwrapper.json"
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
     df.to_json(output_path, orient="records")
