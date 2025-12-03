@@ -17,6 +17,8 @@ services:
       - UPLOAD_FOLDER=${UPLOAD_FOLDER}
       - CLERK_MIDDLEWARE_ENABLED=${CLERK_MIDDLEWARE_ENABLED}
       - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GRAPHDB_USER=${GRAPHDB_USER}
+      - GRAPHDB_PASSWORD=${GRAPHDB_PASSWORD}
     restart: unless-stopped
  #   command: ["bash", "boot.sh"]
 
