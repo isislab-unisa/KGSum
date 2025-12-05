@@ -9,6 +9,8 @@ interface DatasetDistributionItem {
     name: string;
     value: number;
     color: string;
+    // FIX: Added index signature to satisfy the ChartDataInput type used by recharts
+    [key: string]: any;
 }
 
 interface MetricDataItem {
@@ -237,11 +239,11 @@ export default function Statistiche(): ReactNode {
                                             dataKey="value"
                                         >
                                             {datasetDistributionData.map((entry, index) => (
-                                                <Cell key={`cell-${index}`} fill={entry.color} />
+                                                <Cell key={`cell-${index}`} fill={entry.color}/>
                                             ))}
                                         </Pie>
                                         <ChartTooltip
-                                            content={<ChartTooltipContent />}
+                                            content={<ChartTooltipContent/>}
                                             formatter={(value: number | string, name: string) => [
                                                 `${value} datasets`,
                                                 name

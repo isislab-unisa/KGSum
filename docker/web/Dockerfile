@@ -23,7 +23,7 @@ COPY ../../frontend/kgsum-frontend/ ./
 
 # Verify environment variables are set (debug info)
 RUN echo "=== Environment Variables Check ==="
-RUN echo "Build Date: 2025-06-28 13:53:17"
+RUN echo "Build Date: 2025-12-05 13:53:17"
 RUN echo "Build User: mariocosenza"
 RUN echo "==================================="
 

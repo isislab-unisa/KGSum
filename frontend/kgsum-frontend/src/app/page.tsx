@@ -4,7 +4,7 @@ import {Banner} from "@/components/banner";
 
 export default function Home() {
     return (
-        <main className="flex h-[78vh] lg:h-[85vh] px-10 w-full items-center justify-evenly">
+        <main className="flex h-[78vh] lg:h-[85vh] mt-3 px-10 w-full items-center justify-evenly">
             <div className="w-full lg:w-1/2 h-[90%] flex flex-col justify-center">
                 <h1 className="scroll-m-20 text-center text-5xl font-extrabold tracking-tight text-balance mb-8">
                     Automatic Classification and Profiling of Knowledge Graphs
