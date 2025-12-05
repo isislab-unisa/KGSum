@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     env: {
         PORT: process.env.PORT || '80',
         NEXT_PUBLIC_BASE_PATH: '/kgsum',
-        BUILD_DATE: '2025-06-28 13:42:21',
+        BUILD_DATE: '2025-12-05 17:42:21',
         BUILD_USER: 'mariocosenza'
     },
     // Performance optimizations

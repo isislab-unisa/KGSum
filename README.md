@@ -20,7 +20,7 @@
     A Python application for extracting, preparing, and classifying Knowledge Graphs, leveraging LLMs and traditional machine learning.<br>
     <b>Thesis Project, University of Salerno, ISISLab</b>
     <br />
-    <a href="https://github.com/mariocosenza/kgsum/wiki"><strong>Explore the docs »</strong></a>
+    <a href="https://github.com/isislab-unisa/KGSum/wiki"><strong>Explore the docs »</strong></a>
     <br />
     <a href="https://github.com/isislab-unisa/KGSum/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
     &middot;
@@ -63,11 +63,9 @@
 
 **KgSum** is a Python application for extracting, preparing, and classifying Knowledge Graphs (KGs). It combines Large Language Models (such as Mistral Instructor 7B with QLoRA) and traditional machine learning for effective graph classification and profiling.
 
-Thesis Project for Bachelor's Degree  
 University of Salerno  
 Lab: ISISLab  
-Author: Mario Cosenza  
-Supervisor: Maria Angela Pellegrino  
+Author: Mario Cosenza, Maria Angela Pellegrino, Gabriele Tuozzo 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -176,10 +174,10 @@ Configure the backend by editing `config.json`:
     "step_numbers": 10,
     "step_range": 16,
     "extract_sparql": true,
-    "query_lov": false
+    "query_lov": true
   },
   "processing" : {
-    "use_ner": false,
+    "use_ner": true,
     "use_filter": true
   },
   "training" : {
@@ -297,7 +295,7 @@ Three individual Dockerfiles are provided for custom deployments:
 - [x] Improve Docker deployment documentation
 - [ ] Add more dataset preparation examples
 - [ ] Add performance optimization guides
-- [ ] Enhance frontend visualization features
+- [x] Enhance frontend visualization features
 
 See the [open issues](https://github.com/mariocosenza/kgsum/issues) for a full list of proposed features (and known issues).
 
@@ -355,16 +353,17 @@ Project Link: [https://github.com/isislab-unisa/KGSum](https://github.com/marioc
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
-[contributors-shield]: https://img.shields.io/github/contributors/mariocosenza/kgsum.svg?style=for-the-badge
-[contributors-url]: https://github.com/mariocosenza/kgsum/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/mariocosenza/kgsum.svg?style=for-the-badge
-[forks-url]: https://github.com/mariocosenza/kgsum/network/members
+[contributors-shield]: https://img.shields.io/github/contributors/isislab-unisa/KGSum.svg?style=for-the-badge
+[contributors-url]: https://github.com/isislab-unisa/KGSum/graphs/contributors
+[forks-shield]: https://img.shields.io/github/forks/isislab-unisa/KGSum.svg?style=for-the-badge
+[forks-url]: https://github.com/isislab-unisa/KGSum/network/members
 [stars-shield]: https://img.shields.io/github/stars/mariocosenza/kgsum.svg?style=for-the-badge
-[stars-url]: https://github.com/mariocosenza/kgsum/stargazers
-[issues-shield]: https://img.shields.io/github/issues/mariocosenza/kgsum.svg?style=for-the-badge
-[issues-url]: https://github.com/mariocosenza/kgsum/issues
-[license-shield]: https://img.shields.io/github/license/mariocosenza/kgsum.svg?style=for-the-badge
-[license-url]: https://github.com/mariocosenza/kgsum/blob/master/LICENSE.txt
+[stars-url]:https://github.com/isislab-unisa/KGSum/stargazers
+[issues-shield]: https://img.shields.io/github/issues/isislab-unisa/KGSum.svg?style=for-the-badge
+[issues-url]: https://github.com/isislab-unisa/KGSum/issues
+[license-shield]: https://img.shields.io/github/license/isislab-unisa/KGSum.svg?style=for-the-badge
+[license-url]: https://github.com/isislab-unisa/KGSum/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/mariocosenza
+[linkedin-url]: https://it.linkedin.com/school/isislabunisa/
 [product-screenshot]: images/logo_isis.png
+
