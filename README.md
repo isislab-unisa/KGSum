@@ -175,10 +175,10 @@ Configure the backend by editing `config.json`:
     "step_numbers": 10,
     "step_range": 16,
     "extract_sparql": true,
-    "query_lov": false
+    "query_lov": true
   },
   "processing" : {
-    "use_ner": false,
+    "use_ner": true,
     "use_filter": true
   },
   "training" : {
@@ -296,7 +296,7 @@ Three individual Dockerfiles are provided for custom deployments:
 - [x] Improve Docker deployment documentation
 - [ ] Add more dataset preparation examples
 - [ ] Add performance optimization guides
-- [ ] Enhance frontend visualization features
+- [x] Enhance frontend visualization features
 
 See the [open issues](https://github.com/mariocosenza/kgsum/issues) for a full list of proposed features (and known issues).
 
