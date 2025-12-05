@@ -5,9 +5,8 @@
 [![Forks][forks-shield]][forks-url]
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
-[![project_license][license-shield]][license-url]
 [![LinkedIn][linkedin-shield]][linkedin-url]
-
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -367,3 +366,4 @@ Project Link: [https://github.com/isislab-unisa/KGSum](https://github.com/marioc
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://it.linkedin.com/school/isislabunisa/
 [product-screenshot]: images/logo_isis.png
+
