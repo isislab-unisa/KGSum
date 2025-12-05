@@ -361,7 +361,7 @@ export const Form = () => {
                                                             className="w-full h-10 text-sm"
                                                         />
                                                         <p className="text-xs text-muted-foreground">
-                                                            Estensioni: .rdf, .ttl, .nq, .nt, .xml, .json (max 500MB)
+                                                            Extension: .rdf, .ttl, .nq, .nt, .xml, .json (max 500MB)
                                                         </p>
 
                                                         {/* File info display */}
