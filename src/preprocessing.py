@@ -557,7 +557,7 @@ def process_all_from_input(
             "tlds": remove_duplicates(combined_df["tlds"].tolist()),
             "sparql": remove_duplicates(combined_df["sparql"].tolist()),
             "creator": remove_duplicates(combined_df["creator"].tolist()),
-            "download": remove_duplicates(combined_df["download"].tolist()),
+            "download": remove_duplicates(void_df["download"].tolist()),
             "license": remove_duplicates(combined_df["license"].tolist()),
             "language": remove_duplicates(combined_df["language"].tolist()),
             "dsc": remove_duplicates(void_df["dsc"].tolist()),

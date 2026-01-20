@@ -339,7 +339,6 @@ async def store_profile(
         subject_triples = ""
         for subj in _flatten_and_stringify(profile.get('sbj')):
             if subj and IS_URI.match(subj):
-                # Preserve original URI form
                 subject_triples += f'{iri_formatted} dcterms:subject <{subj}> .\n'
 
         if subject_triples:

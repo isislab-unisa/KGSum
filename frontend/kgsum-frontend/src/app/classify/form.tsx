@@ -10,7 +10,7 @@ import {Checkbox} from "@/components/ui/checkbox";
 import {Button} from "@/components/ui/button";
 import {Textarea} from "@/components/ui/textarea";
 import Link from "next/link";
-const UPLOAD = process.env.UPLOAD === 'true';
+const UPLOAD = true
 
 function FileIcon(props: React.SVGProps<SVGSVGElement>) {
     return (
