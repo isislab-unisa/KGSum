@@ -7,7 +7,6 @@ from typing import Any
 
 import pandas as pd
 import spacy
-from conda.gateways.connection.download import download
 from langdetect import detect, DetectorFactory, LangDetectException
 from pandas import Series
 
