@@ -76,7 +76,8 @@ async def generate_profile(endpoint: str | None = None, file: str | None = None)
         if PREDICTOR is None:
             load_predictor()
 
-        profile['category'] = PREDICTOR.predict_category(processed_data)
+        predicted_category = PREDICTOR.predict_category(processed_data)
+        profile['category'] = predicted_category if predicted_category else "UNKNOWN"
         return profile
 
     except Exception as e:
@@ -358,7 +359,6 @@ async def store_profile(
         subject_triples = ""
         for subj in _flatten_and_stringify(profile.get('sbj')):
             if subj and IS_URI.match(subj):
-                # Preserve original URI form
                 subject_triples += f'{iri_formatted} dcterms:subject <{subj}> .\n'
 
         if subject_triples:

@@ -2,6 +2,7 @@ import asyncio
 import logging
 import sys
 import os
+import ssl
 import xml.etree.ElementTree as eT
 from typing import Any
 
@@ -17,10 +18,109 @@ ENDPOINT_TIMEOUT = 600
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("dataset_preparation_remote")
 
+SPARQL_RESULTS_ACCEPT = (
+    "application/sparql-results+xml, application/xml;q=0.9, text/xml;q=0.8, */*;q=0.1"
+)
 
-async def _fetch_query(session: aiohttp.ClientSession, endpoint: str, query: str, timeout: int) -> str:
-    async with session.post(endpoint, data={"query": query}, timeout=timeout) as response:
-        return await response.text()
+try:
+    import certifi
+
+    SSL_CONTEXT = ssl.create_default_context(cafile=certifi.where())
+except Exception:
+    SSL_CONTEXT = None
+
+
+def _one_line_snippet(text: str, limit: int = 240) -> str:
+    snippet = " ".join((text or "").split())
+    if len(snippet) > limit:
+        return snippet[: limit - 3] + "..."
+    return snippet
+
+
+async def _fetch_query(
+        session: aiohttp.ClientSession,
+        endpoint: str,
+        query: str,
+        timeout: int,
+        max_retries: int = 3
+) -> str:
+    headers = {
+        "Accept": SPARQL_RESULTS_ACCEPT,
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36"
+    }
+    timeout_cfg = aiohttp.ClientTimeout(total=timeout)
+
+    if endpoint.startswith("http://"):
+        https_endpoint = "https://" + endpoint[7:]
+        http_endpoint = endpoint
+    elif endpoint.startswith("https://"):
+        https_endpoint = endpoint
+        http_endpoint = "http://" + endpoint[8:]
+    else:
+        https_endpoint = "https://" + endpoint
+        http_endpoint = "http://" + endpoint
+
+    async def _attempt(target_url: str, method: str, use_ssl: Any) -> tuple[int, str, str, str, Exception | None]:
+        kwargs = {
+            "headers": headers,
+            "timeout": timeout_cfg,
+            "allow_redirects": True,
+        }
+
+        if target_url.startswith("https://"):
+            kwargs["ssl"] = use_ssl
+
+        if method == "POST":
+            kwargs["data"] = {"query": query, "format": "application/sparql-results+xml"}
+        else:
+            kwargs["params"] = {"query": query, "format": "application/sparql-results+xml"}
+
+        try:
+            req = session.post(target_url, **kwargs) if method == "POST" else session.get(target_url, **kwargs)
+            async with req as response:
+                body = await response.text()
+                return response.status, response.reason, response.headers.get("Content-Type", ""), body, None
+        except Exception as e:
+            return 0, "", "", "", e
+
+    strategies = [
+        (https_endpoint, "POST", SSL_CONTEXT),
+        (https_endpoint, "GET", SSL_CONTEXT),
+        (https_endpoint, "POST", False),
+        (https_endpoint, "GET", False),
+        (http_endpoint, "POST", False),
+        (http_endpoint, "GET", False)
+    ]
+
+    last_error = "Unknown error"
+
+    for attempt in range(max_retries):
+        for target_url, method, use_ssl in strategies:
+            status, reason, content_type, body, exc = await _attempt(target_url, method, use_ssl)
+
+            if exc:
+                last_error = f"Exception at {target_url} ({method}): {type(exc).__name__} - {str(exc)}"
+                continue
+
+            if status in (429, 500, 502, 503, 504):
+                last_error = f"HTTP {status} {reason} at {target_url}"
+                await asyncio.sleep(2 ** attempt)
+                break
+
+            if status >= 400:
+                clean_body = _one_line_snippet(body, limit=80)
+                last_error = f"HTTP {status} {reason} at {target_url} ({method}); body={clean_body}"
+                continue
+
+            is_xml = "xml" in content_type.lower() or body.lstrip().startswith("<")
+            if status == 200 and is_xml:
+                return body
+            else:
+                clean_body = _one_line_snippet(body, limit=80)
+                last_error = f"Non-XML response at {target_url} ({method}); type={content_type}; body={clean_body}"
+                continue
+
+    raise RuntimeError(f"Failed after {max_retries} retries. Last issue: {last_error}")
 
 
 async def async_select_remote_vocabularies(endpoint: str, timeout: int = 300) -> list[str]:
@@ -261,6 +361,7 @@ async def async_select_remote_property(endpoint: str, timeout: int = 300) -> lis
     logger.info(f"[PROP] Starting property query for endpoint: {endpoint}")
     properties: list[str] = []
     query = f"""
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
         SELECT ?property (COUNT(?s) AS ?usageCount)
         WHERE {{
             ?s ?property ?o .
@@ -342,7 +443,7 @@ async def async_select_void_description(endpoint: str, timeout: int = 300, void_
             if not descriptions and not void_file:
                 void_uri = await async_has_void_file(endpoint, timeout)
                 if void_uri:
-                    return await async_select_void_description(void_uri, timeout, True)
+                    return await async_select_void_description(str(void_uri), timeout, True)
         except Exception as e:
             logger.warning(f"[DSC] Query execution error: {e}. Endpoint: {endpoint}")
             return []
@@ -374,7 +475,7 @@ async def async_select_void_license(endpoint: str, timeout: int = 300, void_file
             if not licenses and not void_file:
                 void_uri = await async_has_void_file(endpoint, timeout)
                 if void_uri:
-                    return await async_select_void_license(void_uri, timeout, True)
+                    return await async_select_void_license(str(void_uri), timeout, True)
         except Exception as e:
             logger.warning(f"[VLIC] Query execution error: {e}. Endpoint: {endpoint}")
             return []
@@ -406,15 +507,16 @@ async def async_select_void_creator(endpoint: str, timeout: int = 300, void_file
             if not creators and not void_file:
                 void_uri = await async_has_void_file(endpoint, timeout)
                 if void_uri:
-                    return await async_select_void_creator(void_uri, timeout, True)
+                    return await async_select_void_creator(str(void_uri), timeout, True)
         except Exception as e:
             logger.warning(f"[VCRE] Query execution error: {e}. Endpoint: {endpoint}")
             return []
     logger.info(f"[VCRE] Finished VOID creator query for endpoint: {endpoint}")
     return list(creators)
 
+
 async def async_select_void_download(endpoint: str, timeout: int = 300, void_file: bool = False) -> list[str]:
-    logger.info(f"[VCRE] Starting VOID creator query for endpoint: {endpoint}")
+    logger.info(f"[DOWNLOAD] Starting VOID download query for endpoint: {endpoint}")
     downloadURL: set[str] = set()
     query = """
         PREFIX void: <http://rdfs.org/ns/void#>
@@ -437,12 +539,13 @@ async def async_select_void_download(endpoint: str, timeout: int = 300, void_fil
             if not downloadURL and not void_file:
                 void_uri = await async_has_void_file(endpoint, timeout)
                 if void_uri:
-                    return await async_select_void_creator(void_uri, timeout, True)
+                    return await async_select_void_download(str(void_uri), timeout, True)
         except Exception as e:
-            logger.warning(f"[VCRE] Query execution error: {e}. Endpoint: {endpoint}")
+            logger.warning(f"[DOWNLOAD] Query execution error: {e}. Endpoint: {endpoint}")
             return []
     logger.info(f"[DOWNLOAD] Finished VOID download query for endpoint: {endpoint}")
     return list(downloadURL)
+
 
 async def async_select_void_subject_remote(endpoint: str, timeout: int = 300, void_file: bool = False) -> list[str]:
     logger.info(f"[SVJ] Starting VOID subject query for endpoint: {endpoint}")
@@ -469,10 +572,11 @@ async def async_select_void_subject_remote(endpoint: str, timeout: int = 300, vo
             if not dataset_uris and not void_file:
                 void_uri = await async_has_void_file(endpoint, timeout)
                 if void_uri:
-                    return await async_select_void_subject_remote(void_uri, timeout, True)
+                    return await async_select_void_subject_remote(str(void_uri), timeout, True)
         except Exception as e:
             logger.warning(f"[SBJ] Query execution error: {e}. Endpoint: {endpoint}")
             return []
+
     class_names: set[str] = set()
     async with aiohttp.ClientSession() as session:
         for ds_uri in dataset_uris:
@@ -485,7 +589,7 @@ async def async_select_void_subject_remote(endpoint: str, timeout: int = 300, vo
                 LIMIT 100
             """
             try:
-                result_text = await _fetch_query(session, ds_uri, query2, timeout)
+                result_text = await _fetch_query(session, endpoint, query2, timeout)
                 root = eT.fromstring(result_text)
                 ns = {"sparql": "http://www.w3.org/2005/sparql-results#"}
                 bindings2 = root.findall('.//sparql:binding[@name="classUri"]/sparql:uri', ns)
@@ -495,6 +599,7 @@ async def async_select_void_subject_remote(endpoint: str, timeout: int = 300, vo
                         class_names.add(cn)
             except Exception as e:
                 logger.warning(f"[SBJ] Error processing VOID subjects for {ds_uri}: {e}")
+
     logger.info(f"[SBJ] Finished VOID subject query for endpoint: {endpoint}")
     return list(class_names)
 
@@ -558,7 +663,7 @@ async def process_endpoint_full_inplace(endpoint: str, ingest_lov: bool = False)
     row = pd.Series({"id": "", "sparql_url": endpoint, "category": ""})
     void_uri = await async_has_void_file(endpoint)
     if void_uri:
-        title = await async_select_remote_title(void_uri)
+        title = await async_select_remote_title(str(void_uri))
     else:
         title = await async_select_remote_title(endpoint)
     if not title:
