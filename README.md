@@ -60,14 +60,7 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-<a href="https://github.com/mariocosenza/kgsum">
-  <img src="images/DemoKgSum.gif" alt="KgSum demo">
-</a>
-
-<video controls width="800">
-  <source src="images/DemoKgSum.mov" type="video/quicktime">
-  Your browser does not support the video tag. You can download the demo here: images/DemoKgSum.mov
-</video>
+[![KgSum demo](images/DemoKgSum.gif)](https://github.com/mariocosenza/kgsum)
 
 **Demo video (direct link):** [DemoKgSum](images/DemoKgSum.mov)
 
