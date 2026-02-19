@@ -60,7 +60,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://github.com/mariocosenza/kgsum)
+<a href="https://github.com/mariocosenza/kgsum">
+  <img src="images/DemoKgSum.gif" alt="KgSum demo">
+</a>
 
 <video controls width="800">
   <source src="images/DemoKgSum.mov" type="video/quicktime">
@@ -373,4 +375,4 @@ Project Link: [https://github.com/isislab-unisa/KGSum](https://github.com/marioc
 [license-url]: https://github.com/isislab-unisa/KGSum/blob/master/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://it.linkedin.com/school/isislabunisa/
-[product-screenshot]: images/logo_isis.png
+[product-screenshot]: images/DemoKgSum.gif
