@@ -57,7 +57,8 @@ async def generate_profile(endpoint: str | None = None, file: str | None = None)
         if PREDICTOR is None:
             load_predictor()
 
-        profile['category'] = PREDICTOR.predict_category(processed_data)
+        predicted_category = PREDICTOR.predict_category(processed_data)
+        profile['category'] = predicted_category if predicted_category else "UNKNOWN"
         return profile
 
     except Exception as e:
