@@ -60,7 +60,9 @@
 <!-- ABOUT THE PROJECT -->
 ## About The Project
 
-[![KgSum demo](images/DemoKgSum.gif)](https://github.com/mariocosenza/kgsum)
+<a href="https://github.com/mariocosenza/kgsum">
+  <img src="images/DemoKgSum.gif" alt="KgSum demo" width="100%">
+</a>
 
 **Demo video (direct link):** [DemoKgSum](images/DemoKgSum.mov)
 
