@@ -105,6 +105,9 @@ def get_custom_count_vectorizer(**kwargs) -> CountVectorizer:
 
 
 def majority_vote(predictions: list[Any] | str | Tuple[Any, float, str]) -> Any:
+    if predictions is None:
+        logger.info("No predictions provided for majority vote.")
+        return None
     if isinstance(predictions, str):
         return predictions
 
