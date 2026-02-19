@@ -21,16 +21,35 @@ def load_predictor():
     PREDICTOR = CategoryPredictor.get_predictor()
 
 
+import aiohttp
+import asyncio
+import logging
+import os
+
+user = os.getenv("GRAPHDB_USER")
+pwd = os.getenv("GRAPHDB_PASSWORD")
+
+
 async def _update_query(query: str, timeout: int = 300) -> str:
-    """Execute SPARQL update query against local endpoint."""
+    """Execute SPARQL update query against local endpoint with Authentication."""
+    auth = aiohttp.BasicAuth(login=user, password=pwd)
     try:
         async with aiohttp.ClientSession() as session:
             async with session.post(
                     LOCAL_ENDPOINT + '/statements',
                     data={'update': query},
+                    auth=auth,
                     timeout=timeout
             ) as response:
+                if response.status == 401:
+                    logger.error("Authentication failed: Invalid username or password.")
+                    response.raise_for_status()
+                elif response.status != 200:
+                    logger.error(f"API Error {response.status}: {await response.text()}")
+                    response.raise_for_status()
+
                 return await response.text()
+
     except asyncio.TimeoutError:
         logger.error(f"Query timeout after {timeout} seconds")
         raise
