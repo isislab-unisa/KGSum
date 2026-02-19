@@ -62,6 +62,13 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://github.com/mariocosenza/kgsum)
 
+<video controls width="800">
+  <source src="images/DemoKgSum.mov" type="video/quicktime">
+  Your browser does not support the video tag. You can download the demo here: images/DemoKgSum.mov
+</video>
+
+**Demo video (direct link):** [DemoKgSum](images/DemoKgSum.mov)
+
 **KgSum** is a Python application for extracting, preparing, and classifying Knowledge Graphs (KGs). It combines Large Language Models (such as Mistral Instructor 7B with QLoRA) and traditional machine learning for effective graph classification and profiling.
 
 University of Salerno  
